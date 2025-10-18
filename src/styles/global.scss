@@ -1,0 +1,171 @@
+// 全局样式变量
+:root {
+  --primary-color: #1890ff;
+  --success-color: #52c41a;
+  --warning-color: #faad14;
+  --error-color: #f5222d;
+  --text-color: #000000d9;
+  --text-color-secondary: #00000073;
+  --border-color: #d9d9d9;
+  --background-color: #ffffff;
+}
+
+// 全局重置样式
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif;
+  font-size: 28px; // 基础字体大小，适配3840宽度设计稿
+  line-height: 1.5;
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+// 通用工具类
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+// Nike字体定义
+@font-face {
+  font-family: 'NikeNormal';
+  src: url('../assets/font/TRADEGOTHICFORNIKE365-ROMAN.TTF') format('truetype');
+}
+
+@font-face {
+  font-family: 'NikeThin';
+  src: url('../assets/font/TRADEGOTHICFORNIKE365-LIGHT.TTF') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nike Trade Gothic Bold';
+  src: url('../assets/font/TRADEGOTHICFORNIKE365-BDCN.TTF') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+// 统一字号工具类：使用 .ft-<数字> 即可，例如 .ft-40 -> 40px
+// 生成 8px 到 120px 的字号类，按 1px 递增
+@for $i from 8 through 120 {
+  .ft-#{$i} {
+    font-size: #{$i}px;
+  }
+}
+
+// 统一宽度工具类：使用 .w-<数字> 即可，例如 .w-200 -> 200px
+// 生成 1px 到 2000px 的宽度类，按 1px 递增
+@for $w from 1 through 2000 {
+  .w-#{$w} {
+    width: #{$w}px;
+  }
+}
+@for $w from 1 through 2000 {
+  .h-#{$w} {
+    height: #{$w}px;
+  }
+}
+@for $i from 0 through 2000 {
+  .mt-#{$i} {
+    margin-top: #{$i}px;
+  }
+}
+@for $i from 0 through 2000 {
+  .mr-#{$i} {
+    margin-right: #{$i}px;
+  }
+}
+@for $i from 0 through 2000 {
+  .lh-#{$i} {
+    line-height: #{$i}px;
+  }
+}
+@for $i from 0 through 2000 {
+  .mb-#{$i} {
+    margin-bottom: #{$i}px;
+  }
+}
+@for $i from 0 through 2000 {
+  .ml-#{$i} {
+    margin-left: #{$i}px;
+  }
+}
+.font-normal {
+  font-family: 'NikeNormal';
+}
+.font-bold {
+  font-family: 'Nike Trade Gothic Bold';
+}
+.line-height-19 {
+  line-height: 19px;
+}
+.flex-center {
+  display: flex;
+}
+.gap-8 {
+  gap: 8px;
+}
