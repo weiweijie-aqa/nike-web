@@ -189,7 +189,7 @@ import indexData from './Index.json'
 
 const chartRef = ref<HTMLDivElement>()
 // JSON数据对象
-const data = ref(indexData)
+const data = ref()
 
 // 窗口尺寸响应式数据
 const windowSize = ref({
