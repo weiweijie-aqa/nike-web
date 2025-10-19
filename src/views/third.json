@@ -1,0 +1,27 @@
+{
+  "InboundVolume": "81.22",
+  "OnTimeArrivalRate": "92",
+  "DockToStockTime": "4.3",
+  "AsnAccuracy": "98.7",
+  "ExceptionRate": "1.8",
+  "PlannedReceivingCartons": "35",
+  "BookedVSEnteredTruckers": "18/14",
+  "RealTimeReceivingProgress": "62",
+  "MonthIB4": [
+    { "Month": "Jun", "Inbound": "40" },
+    { "Month": "Sep", "Inbound": "21" },
+    { "Month": "Dec", "Inbound": "70" },
+    { "Month": "Mar", "Inbound": "49" }
+  ],
+  "DailyExceptions": {
+    "Daily": [
+      { "Stage": "Shortage", "Count": "4" },
+      { "Stage": "UnexpectedCarton", "Count": "4" },
+      { "Stage": "MixedSKUSize", "Count": "3/5" },
+      { "Stage": "WetCarton", "Count": "2" },
+      { "Stage": "Damaged", "Count": "2" },
+      { "Stage": "UPCUcclabellssue", "Count": "2" },
+      { "Stage": "Systemlssue", "Count": "2" }
+    ]
+  }
+}

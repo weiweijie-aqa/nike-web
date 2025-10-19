@@ -1,0 +1,23 @@
+{
+  "TodayGlVolume": { "Normal": "170", "Repack": "120", "Total": "290" },
+  "MTDVolume": { "Normal": "170", "Repack": "120", "Total": "290" },
+  "CurrentStatus": "25",
+  "Monthly": "25",
+  "ShipOnTime": "99",
+  "OrderFillin": "99.9",
+  "OrderAccuracy": "99.9",
+  "Month12": [
+    { "Month": "Sep", "Outbound": "900" },
+    { "Month": "Oct", "Outbound": "901" },
+    { "Month": "Nov", "Outbound": "903" },
+    { "Month": "Dec", "Outbound": "904" },
+    { "Month": "Jan", "Outbound": "905" },
+    { "Month": "Feb", "Outbound": "906" },
+    { "Month": "Mar", "Outbound": "907" },
+    { "Month": "Apr", "Outbound": "908" },
+    { "Month": "May", "Outbound": "909" },
+    { "Month": "Jun", "Outbound": "910" },
+    { "Month": "Jul", "Outbound": "911" },
+    { "Month": "Aug", "Outbound": "911" }
+  ]
+}

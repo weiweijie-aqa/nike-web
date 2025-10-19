@@ -1,0 +1,26 @@
+{
+  "TodayRepackingVolume": "120",
+  "CapacityUtilization": "85",
+  "OverallRepackingStatus": "25",
+  "Replenish": "35",
+  "PickPack": "25",
+  "Floor2": "35",
+  "Floor3": "25",
+  "F2VSF3": { "F2": "3.5", "F3": "2.8" },
+  "MonthPP12": {
+    "PPData": [
+      { "Month": "Sep", "RepackingVolume": "900", "Percentage": "9" },
+      { "Month": "Oct", "RepackingVolume": "901", "Percentage": "10" },
+      { "Month": "Nov", "RepackingVolume": "903", "Percentage": "11" },
+      { "Month": "Dec", "RepackingVolume": "904", "Percentage": "12" },
+      { "Month": "Jan", "RepackingVolume": "905", "Percentage": "13" },
+      { "Month": "Feb", "RepackingVolume": "906", "Percentage": "14" },
+      { "Month": "Mar", "RepackingVolume": "907", "Percentage": "15" },
+      { "Month": "Apr", "RepackingVolume": "908", "Percentage": "16" },
+      { "Month": "May", "RepackingVolume": "909", "Percentage": "17" },
+      { "Month": "Jun", "RepackingVolume": "910", "Percentage": "18" },
+      { "Month": "Jul", "RepackingVolume": "911", "Percentage": "19" },
+      { "Month": "Aug", "RepackingVolume": "911", "Percentage": "20" }
+    ]
+  }
+}
