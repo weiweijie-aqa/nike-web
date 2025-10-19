@@ -185,7 +185,7 @@
 import ContainerBox from '../components/ContainerBox.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import indexData from './Index.json'
+// import indexData from './Index.json'
 
 const chartRef = ref<HTMLDivElement>()
 // JSON数据对象

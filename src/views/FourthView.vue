@@ -156,7 +156,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import fourthData from './Fourth.json'
+// import fourthData from './Fourth.json'
 
 // JSON数据对象
 const data = ref()

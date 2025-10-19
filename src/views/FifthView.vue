@@ -312,7 +312,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import fifthData from './fifth.json'
+// import fifthData from './fifth.json'
 const data = ref()
 const flag = ref(true)
 const hideView = () => {
