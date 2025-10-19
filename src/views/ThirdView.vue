@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <div  v-if="data" class="page-content">
     <div class="left">
       {{}}
       <div class="top">
@@ -105,33 +105,33 @@
       <div class="info-list">
         <div class="info-box">
           <img src="../assets/icon9.svg" alt="" />
-          <span class="line-height-19">INEOUND</span>
-          <span class="line-height-19">VOLLIME</span>
-          <span class="count">81.2k</span>
+          <span class="line-height-19">Inbound</span>
+          <span class="line-height-19">Volume</span>
+          <span class="count">{{ data.InboundVolume }}k</span>
         </div>
         <div class="info-box">
           <img src="../assets/icon10.svg" alt="" />
-          <span class="line-height-19">ON-TIME</span>
-          <span class="line-height-19">ARRIVAL RATE</span>
-          <span class="count">92%</span>
+          <span class="line-height-19">On-Time </span>
+          <span class="line-height-19">Arrival Rate</span>
+          <span class="count">{{ data.OnTimeArrivalRate }}%</span>
         </div>
         <div class="info-box">
           <img src="../assets/icon11.svg" alt="" />
-          <span class="line-height-19">DOCK TO-</span>
-          <span class="line-height-19">STUCK TIME</span>
-          <span class="count">81.2k</span>
+          <span class="line-height-19">Dock ToStock</span>
+          <span class="line-height-19">Time</span>
+          <span class="count">{{ data.DockToStockTime }}min</span>
         </div>
         <div class="info-box">
           <img src="../assets/icon12.svg" alt="" />
-          <span class="line-height-19">ASN</span>
-          <span class="line-height-19">ACCURACY</span>
-          <span class="count">98.7%</span>
+          <span class="line-height-19">Asn</span>
+          <span class="line-height-19">Accuracy</span>
+          <span class="count">{{ data.AsnAccuracy }}%</span>
         </div>
         <div class="info-box">
           <img src="../assets/icon13.svg" alt="" />
-          <span class="line-height-19">EXCEPTION</span>
-          <span class="line-height-19">RATE</span>
-          <span class="count">1.8%</span>
+          <span class="line-height-19">Exception</span>
+          <span class="line-height-19">Rate</span>
+          <span class="count">{{ data.ExceptionRate }}%</span>
         </div>
       </div>
       <div style="display: flex; justify-content: space-between; flex-wrap: wrap">
@@ -140,26 +140,25 @@
             <div class="icon-wrap">
               <img src="../assets/icon9.svg" alt="" />
             </div>
-
-            <span class="line-height-19">PlANNED RECEDING</span>
-            <span class="line-height-19">CARTONS</span>
-            <span class="count">35.000</span>
+            <span class="line-height-19">Planned</span>
+            <span class="line-height-19">Receiving Cartons</span>
+            <span class="count">{{ data.PlannedReceivingCartons }}</span>
           </div>
           <div class="info-box">
             <div class="icon-wrap">
               <img src="../assets/icon14.svg" alt="" />
             </div>
-            <span class="line-height-19">BOOKED VS ENTERED</span>
-            <span class="line-height-19">TRUCKERS</span>
-            <span class="count">18/14</span>
+            <span class="line-height-19">Booked VS Entered</span>
+            <span class="line-height-19">Truckers</span>
+            <span class="count">{{ data.BookedVSEnteredTruckers }}</span>
           </div>
         </div>
         <div class="receiving-progaess">
-          <div class="title">Real-time receiving progaess</div>
+          <div class="title">Real Time Receiving Progress</div>
           <div style="display: flex; align-items: center; flex-direction: column">
             <a-progress
               type="circle"
-              :percent="62"
+              :percent="data.RealTimeReceivingProgress"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="120"
@@ -172,11 +171,11 @@
             <div class="legend">
               <div class="item">
                 <div class="dot" style="background-color: #ff5a00"></div>
-                <span>planned</span>
+                <span>Planned</span>
               </div>
               <div class="item">
                 <div class="dot" style="background-color: #99a8bd"></div>
-                <span>planned volume</span>
+                <span>Planned Volume</span>
               </div>
             </div>
           </div>
@@ -185,28 +184,17 @@
           <div ref="chartRef" class="chart"></div>
         </div>
         <div class="daily-exceptions">
-          <div class="title">Daily exceptions</div>
+          <div class="title">Daily Exceptions</div>
 
           <div class="table-header">
             <div class="column">Stage</div>
             <div class="column">Count</div>
           </div>
-          <div class="table-body">
-            <div class="column">Unleading Carrier Issue</div>
-            <div class="column">4</div>
+          <div class="table-body" v-for="item in data.DailyExceptions.Daily" :key="item.Stage">
+            <div class="column">{{ item.Stage }}</div>
+            <div class="column">{{ item.Count }}</div>
           </div>
-          <div class="table-body">
-            <div class="column">Goods Rework</div>
-            <div class="column">3</div>
-          </div>
-          <div class="table-body">
-            <div class="column">Documentation Error</div>
-            <div class="column">2</div>
-          </div>
-          <div class="table-body">
-            <div class="column">Excepetion Count</div>
-            <div class="column">2</div>
-          </div>
+
         </div>
       </div>
     </div>
@@ -215,7 +203,45 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
+import thirdData from './Third.json'
 
+// JSON数据对象
+const data = ref()
+const flag = ref(true)
+const hideView = () => {
+  if (flag.value) {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(-100%)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(100%)'
+    }
+  } else {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(0)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(0)'
+    }
+  }
+  flag.value = !flag.value
+}
+window.ue.interface.handleHide = () => {
+  hideView()
+}
+/* 接收 UE 消息 */
+window.ue.interface.sendData = (jsonStr: string) => {
+  data.value = JSON.parse(jsonStr)
+  setTimeout(() => {
+    handleResize()
+  }, 100)
+}
 const chartRef = ref<HTMLDivElement>()
 // 窗口尺寸响应式数据
 const windowSize = ref({
@@ -235,7 +261,7 @@ const setChart = () => {
 
     const option = {
       title: {
-        text: 'Inbound vollume',
+        text: 'Inbound Volume',
         left: 'left',
         top: 0,
         textStyle: {
@@ -265,7 +291,7 @@ const setChart = () => {
       },
       xAxis: {
         type: 'category',
-        data: ['Mar', 'Jan', 'Sep', 'May'],
+        data: data.value.MonthIB4.map((item) => item.Month),
         axisLine: {
           lineStyle: {
             color: 'rgba(0,0,0,0.05)',
@@ -285,6 +311,15 @@ const setChart = () => {
       },
       yAxis: {
         type: 'value',
+        name: '(K units)',
+        nameLocation: 'end',
+        min: 'dataMin', // 取数据最小值
+        nameTextStyle: {
+          color: '#666',
+          fontFamily: 'NikeNormal',
+          fontSize: '16',
+        },
+
         axisLine: {
           lineStyle: {
             color: '#ccc',
@@ -303,7 +338,7 @@ const setChart = () => {
         {
           name: 'GI',
           type: 'line',
-          data: [60, 80, 40, 30],
+          data: data.value.MonthIB4.map((item) => item.Inbound),
           lineStyle: {
             color: '#EA5E13',
             width: 3,
@@ -335,6 +370,13 @@ const handleResize = () => {
     width: window.innerWidth,
     height: window.innerHeight,
   }
+    // 清理图表实例
+  if (chartRef.value) {
+    const existingChart = echarts.getInstanceByDom(chartRef.value)
+    if (existingChart) {
+      existingChart.dispose()
+    }
+  }
   // 窗口大小变化时重新设置图表
   setChart()
 }
@@ -343,9 +385,7 @@ const handleResize = () => {
 onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
-
-  // 初始化图表
-  setChart()
+  ue5('loaded', { msg: '加载完成了' })
 })
 
 // 组件卸载时移除事件监听器
@@ -613,7 +653,7 @@ onUnmounted(() => {
         width: 100%;
         display: flex;
         background: rgba(255, 136, 27, 0.2);
-        height: 48px;
+        height: 30px;
         align-items: center;
         padding: 0 8px;
         box-sizing: border-box;
@@ -637,7 +677,7 @@ onUnmounted(() => {
       .table-body {
         width: 100%;
         display: flex;
-        height: 40px;
+        height: 27px;
         align-items: center;
         padding: 0 8px;
         box-sizing: border-box;

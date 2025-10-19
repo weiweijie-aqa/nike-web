@@ -262,7 +262,7 @@ const initChart = () => {
       },
       xAxis: {
         type: 'category',
-        data: data.value['12Month'].map((item) => item.Month),
+        data: data.value['Month12'].map((item) => item.Month),
         axisLine: {
           lineStyle: {
             color: 'rgba(0,0,0,0.05)',
@@ -307,7 +307,7 @@ const initChart = () => {
         {
           name: 'Inbound',
           type: 'line',
-          data: data.value['12Month'].map((item) => item.Inbound),
+          data: data.value['Month12'].map((item) => item.Inbound),
           lineStyle: {
             color: '#EA5E13',
             width: 3,
@@ -321,7 +321,7 @@ const initChart = () => {
         {
           name: 'Outbound',
           type: 'line',
-          data: data.value['12Month'].map((item) => item.Outbound),
+          data: data.value['Month12'].map((item) => item.Outbound),
           lineStyle: {
             color: '#5291EA',
             width: 3,

@@ -1,8 +1,8 @@
 <template>
-  <div class="page-content">
+  <div  v-if="data" class="page-content">
     <div class="left">
       <div class="top">
-        <img src="../assets/map.png" alt="">
+        <img src="../assets/map.png" alt="" />
       </div>
       <div class="bottom">
         <div class="lb_wrap">
@@ -18,7 +18,9 @@
         <div class="section-title">Today's GI Volume</div>
         <div class="section-content">
           <div class="volume-info">
-            <div class="volume-number">290 <span class="unit">Ku</span></div>
+            <div class="volume-number">
+              {{ data.TodayGlVolume.Total }} <span class="unit">Ku</span>
+            </div>
             <div class="chart-container">
               <div ref="chartRef1" class="echarts-container"></div>
             </div>
@@ -31,19 +33,25 @@
         <div class="section-title">Current Status</div>
         <div class="ytd-item">
           <div class="icon-wrap">
-            <img src="../assets/icon3.svg" class="icon" />
+            <img src="../assets/icon28.svg" class="icon" />
           </div>
           <div class="ytd-info">
             <div style="display: flex; align-items: center; justify-content: space-between">
               <div class="ytd-label"></div>
-              <span class="ytd-percentage">25%</span>
+              <span class="ytd-percentage">{{ data.CurrentStatus }}%</span>
             </div>
 
             <div class="ytd-progress">
-              <a-progress :percent="25" :showInfo="false" :size="12" trailColor="#ADADAD" :stroke-color="{
-                '0%': '#FF5A00',
-                '100%': '#FF881B',
-              }" />
+              <a-progress
+                :percent="data.CurrentStatus"
+                :showInfo="false"
+                :size="12"
+                trailColor="#ADADAD"
+                :stroke-color="{
+                  '0%': '#FF5A00',
+                  '100%': '#FF881B',
+                }"
+              />
             </div>
           </div>
         </div>
@@ -54,7 +62,7 @@
         <div class="section-title">MTD GI Volume</div>
         <div class="section-content">
           <div class="volume-info">
-            <div class="volume-number">290 <span class="unit">Ku</span></div>
+            <div class="volume-number">{{ data.MTDVolume.Total }} <span class="unit">Ku</span></div>
             <div class="chart-container">
               <div ref="chartRef2" class="echarts-container"></div>
             </div>
@@ -67,19 +75,25 @@
         <div class="section-title">Monthly Shipment Target Fulfillment</div>
         <div class="ytd-item">
           <div class="icon-wrap">
-            <img src="../assets/icon3.svg" class="icon" />
+            <img src="../assets/iocn29.svg" class="icon" />
           </div>
           <div class="ytd-info">
             <div style="display: flex; align-items: center; justify-content: space-between">
               <div class="ytd-label"></div>
-              <span class="ytd-percentage">25%</span>
+              <span class="ytd-percentage">{{ data.Monthly }}%</span>
             </div>
 
             <div class="ytd-progress">
-              <a-progress :percent="25" :showInfo="false" :size="12" trailColor="#ADADAD" :stroke-color="{
-                '0%': '#FF5A00',
-                '100%': '#FF881B',
-              }" />
+              <a-progress
+                :percent="data.Monthly"
+                :showInfo="false"
+                :size="12"
+                trailColor="#ADADAD"
+                :stroke-color="{
+                  '0%': '#FF5A00',
+                  '100%': '#FF881B',
+                }"
+              />
             </div>
           </div>
         </div>
@@ -95,7 +109,7 @@
             </div>
             <div class="info">
               <div class="code">Ship On Time%</div>
-              <div class="value">99%</div>
+              <div class="value">{{data.ShipOnTime}}%</div>
             </div>
           </div>
           <div class="box">
@@ -104,7 +118,7 @@
             </div>
             <div class="info">
               <div class="code">Order Fill in%</div>
-              <div class="value">99.9%</div>
+              <div class="value">{{data.OrderFillin}}%</div>
             </div>
           </div>
           <div class="box">
@@ -113,7 +127,7 @@
             </div>
             <div class="info">
               <div class="code">Order Accuracy%</div>
-              <div class="value">99.9%</div>
+              <div class="value">{{data.OrderAccuracy}}%</div>
             </div>
           </div>
         </div>
@@ -128,6 +142,45 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
+import secondData from './Second.json'
+
+// JSON数据对象
+const data = ref()
+const flag = ref(true)
+const hideView = () => {
+  if (flag.value) {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(-100%)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(100%)'
+    }
+  } else {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(0)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(0)'
+    }
+  }
+  flag.value = !flag.value
+}
+window.ue.interface.handleHide = () => {
+  hideView()
+}
+/* 接收 UE 消息 */
+window.ue.interface.sendData = (jsonStr: string) => {
+  data.value = JSON.parse(jsonStr)
+  setTimeout(() => {
+    handleResize()
+  }, 100)
+}
 
 const chartRef1 = ref<HTMLDivElement>()
 const chartRef2 = ref<HTMLDivElement>()
@@ -176,27 +229,28 @@ const initAllCharts = () => {
 const initChart1 = () => {
   if (chartRef1.value) {
     const chart = echarts.init(chartRef1.value)
+    const percent = (Number(data.value.TodayGlVolume.Repack) / Number(data.value.TodayGlVolume.Total) * 100).toFixed(2)
 
     const option = {
       title: {
-        text: '{percent|42%}\n{label|Repacking}',
+        text: `{percent|${percent}%}\n{label|Repack}`,
         left: 'center',
         top: 'center',
         textStyle: {
           rich: {
             percent: {
-              fontSize: "16",
-              color: " #232525",
+              fontSize: '16',
+              color: ' #232525',
               fontFamily: 'NikeNormal',
               fontWeight: 'normal',
             },
             label: {
-              fontSize: "14",
-              color: " #232525",
+              fontSize: '14',
+              color: ' #232525',
               fontFamily: 'NikeNormal',
               fontWeight: 'normal',
-            }
-          }
+            },
+          },
         },
       },
       series: [
@@ -211,26 +265,26 @@ const initChart1 = () => {
             position: 'outside',
             formatter: '{c}',
             color: '#232525',
-            fontSize: "14",
+            fontSize: '14',
             fontFamily: 'NikeNormal',
           },
           labelLine: {
-            show: true,          // 是否显示引导线
-            length: 10,          // 第一段线长（从扇形边缘出发）
-            length2: 20,         // 第二段线长（折后横向段）
-            smooth: 0.2,         // 折线圆角平滑度
+            show: true, // 是否显示引导线
+            length: 10, // 第一段线长（从扇形边缘出发）
+            length2: 20, // 第二段线长（折后横向段）
+            smooth: 0.2, // 折线圆角平滑度
           },
           data: [
             {
-              value: 1048,
-              name: 'Search Engine',
+              value: data.value.TodayGlVolume.Repack,
+              name: 'Repack',
               itemStyle: {
                 borderRadius: 200,
               },
             },
             {
-              value: 735,
-              name: 'Direct',
+              value: data.value.TodayGlVolume.Normal,
+              name: 'Normal',
             },
           ],
         },
@@ -245,27 +299,27 @@ const initChart1 = () => {
 const initChart2 = () => {
   if (chartRef2.value) {
     const chart2 = echarts.init(chartRef2.value)
-
+    const percent = (Number(data.value.MTDVolume.Repack) / Number(data.value.MTDVolume.Total) * 100).toFixed(2)
     const option = {
       title: {
-        text: '{percent|42%}\n{label|Repacking}',
+        text: `{percent|${percent}%}\n{label|Repack}`,
         left: 'center',
         top: 'center',
         textStyle: {
           rich: {
             percent: {
-              fontSize: "16",
-              color: " #232525",
+              fontSize: '16',
+              color: ' #232525',
               fontFamily: 'NikeNormal',
               fontWeight: 'normal',
             },
             label: {
-              fontSize: "14",
-              color: " #232525",
+              fontSize: '14',
+              color: ' #232525',
               fontFamily: 'NikeNormal',
               fontWeight: 'normal',
-            }
-          }
+            },
+          },
         },
       },
       series: [
@@ -280,26 +334,26 @@ const initChart2 = () => {
             position: 'outside',
             formatter: '{c}',
             color: '#232525',
-            fontSize: "14",
+            fontSize: '14',
             fontFamily: 'NikeNormal',
           },
           labelLine: {
-            show: true,          // 是否显示引导线
-            length: 10,          // 第一段线长（从扇形边缘出发）
-            length2: 20,         // 第二段线长（折后横向段）
-            smooth: 0.2,         // 折线圆角平滑度
+            show: true, // 是否显示引导线
+            length: 10, // 第一段线长（从扇形边缘出发）
+            length2: 20, // 第二段线长（折后横向段）
+            smooth: 0.2, // 折线圆角平滑度
           },
           data: [
             {
-              value: 1048,
-              name: 'Search Engine',
+              value: data.value.MTDVolume.Repack,
+              name: 'Repack',
               itemStyle: {
                 borderRadius: 200,
               },
             },
             {
-              value: 735,
-              name: 'Direct',
+              value: data.value.MTDVolume.Normal,
+              name: 'Normal',
             },
           ],
         },
@@ -316,12 +370,12 @@ const initChart3 = () => {
 
     const option = {
       title: {
-        text: '12 month rolling volume',
+        text: '12 Month Rolling Volume',
         left: 'left',
         top: 0,
         textStyle: {
           color: '#110600',
-          fontSize: "24",
+          fontSize: '24',
           fontWeight: 'bold',
           fontFamily: 'Nike Trade Gothic Bold',
         },
@@ -334,9 +388,9 @@ const initChart3 = () => {
         textStyle: {
           color: '#110600',
           fontFamily: 'NikeNormal',
-          fontSize: "16",
+          fontSize: '16',
         },
-        width: "300",
+        width: '300',
       },
       grid: {
         left: '3%',
@@ -346,7 +400,7 @@ const initChart3 = () => {
       },
       xAxis: {
         type: 'category',
-        data: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        data: data.value.Month12.map((item) => item.Month),
         axisLine: {
           lineStyle: {
             color: 'rgba(0,0,0,0.05)',
@@ -360,11 +414,12 @@ const initChart3 = () => {
         },
         axisLabel: {
           color: '#110600',
-          fontSize: "16",
+          fontSize: '16',
         },
       },
       yAxis: {
         type: 'value',
+        min: 'dataMin', // 取数据最小值
         axisLine: {
           lineStyle: {
             color: '#ccc',
@@ -383,7 +438,7 @@ const initChart3 = () => {
         {
           name: 'GI',
           type: 'line',
-          data: [350, 700, 450, 750, 1250, 1450, 1250, 1700, 1200, 750, 850],
+          data: data.value.Month12.map((item) => item.Outbound),
           lineStyle: {
             color: '#EA5E13',
             width: 3,
@@ -394,7 +449,6 @@ const initChart3 = () => {
           symbol: 'none',
           smooth: true,
         },
-
       ],
       tooltip: {
         trigger: 'axis',
@@ -410,15 +464,11 @@ const initChart3 = () => {
   }
 }
 
-
-
 // 示例用法（可以在控制台查看）
 onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
-
-  // 初始化所有图表
-  initAllCharts()
+  ue5('loaded', { msg: '加载完成了' })
 })
 
 // 组件卸载时移除事件监听器
@@ -461,7 +511,7 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
       justify-content: center;
-      img{
+      img {
         width: 709px;
         height: 371px;
       }
@@ -531,12 +581,16 @@ onUnmounted(() => {
         .icon-wrap {
           width: 58px;
           height: 58px;
-          background: linear-gradient(163deg, rgba(254, 91, 0, 0.2) 0%, rgba(255, 135, 26, 0.2) 100%);
+          background: linear-gradient(
+            163deg,
+            rgba(254, 91, 0, 0.2) 0%,
+            rgba(255, 135, 26, 0.2) 100%
+          );
           border-radius: 16px;
           display: flex;
           align-items: center;
           justify-content: center;
-          .icon{
+          .icon {
             width: 40px;
             height: 40px;
           }
@@ -580,8 +634,6 @@ onUnmounted(() => {
         justify-content: space-between;
         width: 100%;
         margin-left: 38px;
-
-
 
         .volume-number {
           font-family: 'Nike Trade Gothic Bold';
@@ -673,7 +725,7 @@ onUnmounted(() => {
         display: flex;
 
         .box {
-         width: 290.67px;
+          width: 290.67px;
           display: flex;
           align-items: center;
           gap: 20px;
@@ -681,12 +733,16 @@ onUnmounted(() => {
           .icon-wrap {
             width: 58px;
             height: 58px;
-            background: linear-gradient(163deg, rgba(254, 91, 0, 0.2) 0%, rgba(255, 135, 26, 0.2) 100%);
+            background: linear-gradient(
+              163deg,
+              rgba(254, 91, 0, 0.2) 0%,
+              rgba(255, 135, 26, 0.2) 100%
+            );
             border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            .icon{
+            .icon {
               width: 40px;
               height: 40px;
             }
@@ -706,7 +762,6 @@ onUnmounted(() => {
             }
           }
         }
-
       }
     }
 

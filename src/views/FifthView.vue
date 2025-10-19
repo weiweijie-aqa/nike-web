@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <div v-if="data" class="page-content">
     <div class="left">
       <div class="equipment-statistics mb-8">
         <div class="title">OMNI Equipment Statistics</div>
@@ -113,16 +113,18 @@
       <div class="flex gap-8" style="width: 100%">
         <div class="sku">
           <div class="title">SKU</div>
-          <div class="value">120<span class="ft-28">K</span><span class="ft-24">u</span></div>
+          <div class="value">
+            {{ data.SKU }}<span class="ft-28">K</span><span class="ft-24">u</span>
+          </div>
           <img src="../assets/icon22.svg" alt="" />
         </div>
         <div class="sku">
-          <div class="title">Inventory utilization %</div>
-          <div class="value">85<span class="ft-36">%</span></div>
+          <div class="title">Inventory Utilization %</div>
+          <div class="value">{{ data.Inventoryutilization }}<span class="ft-36">%</span></div>
           <div class="progress-wrap">
             <a-progress
               type="circle"
-              :percent="85"
+              :percent="data.Inventoryutilization"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="100"
@@ -142,13 +144,13 @@
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #99a8bd"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Double Deep <span class="ml-12">35%</span>
+                Double Deep <span class="ml-12">{{ data.DD }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #ff6c0a"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Single Deep <span class="ml-12">35%</span>
+                Single Deep <span class="ml-12">{{ data.SD }}%</span>
               </div>
             </div>
           </div>
@@ -159,13 +161,13 @@
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #99a8bd"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Lower <span class="ml-12">35%</span>
+                Lower <span class="ml-12">{{ data.Lower }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #ff6c0a"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Upper <span class="ml-12">35%</span>
+                Upper <span class="ml-12">{{ data.Upper }}%</span>
               </div>
             </div>
           </div>
@@ -176,20 +178,20 @@
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #4e4e4e"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Small <span class="ml-12">35%</span>
+                Small <span class="ml-12">{{ data.Small }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #a9acb2"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
                 Medium
-                <span class="ml-12">35%</span>
+                <span class="ml-12">{{ data.Medium }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #ff6c0a"></div>
               <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Large <span class="ml-12">35%</span>
+                Large <span class="ml-12">{{ data.Large }}%</span>
               </div>
             </div>
           </div>
@@ -232,61 +234,73 @@
       </div>
       <div class="flex last-charts-section">
         <div class="box">
-          <div class="font-bold ft-24" style="color: #232525">RFID IB Read Statistics</div>
+          <div class="font-bold ft-24" style="color: #232525; line-height: 30px">
+            RFID IB Read Statistics
+          </div>
           <div class="flex chart-wrap">
-            <a-progress
-              type="circle"
-              :percent="85"
-              trailColor="#99A8BD"
-              strokeColor="#FF5A00"
-              :size="80"
-              :strokeWidth="12.5"
-            >
-              <template #format="percent">
-                <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
-                <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
-                  Accuracy
-                </div>
-              </template>
-            </a-progress>
+            <div class="flex" style="flex-direction: column; align-items: center">
+              <a-progress
+                type="circle"
+                :percent="data.IB_Accuracy"
+                trailColor="#99A8BD"
+                strokeColor="#FF5A00"
+                :size="80"
+                :strokeWidth="12.5"
+              >
+                <template #format="percent">
+                  <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
+                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
+                    Accuracy
+                  </div>
+                </template>
+              </a-progress>
+              <div class="font-normal ft-15" style="color: #110600">Last Month Performance</div>
+            </div>
+
             <div class="ml-48">
               <div class="flex" style="align-items: center">
                 <img src="../assets/icon27.svg" alt="" />
-                <span class="font-bold ft-20" style="color: #110600">20 CTN</span>
+                <span class="font-bold ft-20" style="color: #110600">{{ data.IB_CTN }} CTN</span>
               </div>
               <div>
                 <img src="../assets/icon26.svg" alt="" />
-                <span class="font-bold ft-20" style="color: #110600">120 Unit</span>
+                <span class="font-bold ft-20" style="color: #110600">{{ data.IB_Unit }} Unit</span>
               </div>
             </div>
           </div>
         </div>
         <div class="box">
-          <div class="font-bold ft-24" style="color: #232525">RFID OB Read Statistics</div>
+          <div class="font-bold ft-24" style="color: #232525; line-height: 30px">
+            RFID OB Read Statistics
+          </div>
           <div class="flex chart-wrap">
-            <a-progress
-              type="circle"
-              :percent="85"
-              trailColor="#99A8BD"
-              strokeColor="#FF5A00"
-              :size="80"
-              :strokeWidth="12.5"
-            >
-              <template #format="percent">
-                <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
-                <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
-                  Accuracy
-                </div>
-              </template>
-            </a-progress>
+            <div class="flex" style="flex-direction: column; align-items: center">
+              <a-progress
+                type="circle"
+                :percent="data.OB_Accuracy"
+                trailColor="#99A8BD"
+                strokeColor="#FF5A00"
+                :size="80"
+                :strokeWidth="12.5"
+              >
+                <template #format="percent">
+                  <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
+                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
+                    Accuracy
+                  </div>
+                </template>
+              </a-progress>
+              <div class="font-normal ft-15" style="color: #110600">Last Month Performance</div>
+            </div>
+
             <div class="ml-48">
               <div class="flex" style="align-items: center">
                 <img src="../assets/icon27.svg" alt="" />
-                <span class="font-bold ft-20" style="color: #110600">20 CTN</span>
+                <span class="font-bold ft-20" style="color: #110600">{{ data.OB_CTN }} CTN</span>
               </div>
               <div>
                 <img src="../assets/icon26.svg" alt="" />
-                <span class="font-bold ft-20" style="color: #110600">120 Unit</span>
+                <span class="font-bold ft-20" style="color: #110600">{{ data.OB_Unit }} Unit</span>
               </div>
             </div>
           </div>
@@ -298,7 +312,43 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-
+import fifthData from './fifth.json'
+const data = ref()
+const flag = ref(true)
+const hideView = () => {
+  if (flag.value) {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(-100%)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(100%)'
+    }
+  } else {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(0)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(0)'
+    }
+  }
+  flag.value = !flag.value
+}
+window.ue.interface.handleHide = () => {
+  hideView()
+}
+/* 接收 UE 消息 */
+window.ue.interface.sendData = (jsonStr: string) => {
+  data.value = JSON.parse(jsonStr)
+  setTimeout(() => {
+    handleResize()
+  }, 100)
+}
 const chartRef1 = ref<HTMLDivElement>()
 const chartRef2 = ref<HTMLDivElement>()
 const chartRef3 = ref<HTMLDivElement>()
@@ -319,6 +369,12 @@ const handleResize = () => {
   }
   // 先销毁现有图表实例，再重新创建
   destroyAllCharts()
+  // 初始化所有图表
+  initChart1()
+  initChart2()
+  initChart3()
+  initChart4()
+  initChart5()
 }
 // 初始化第一个图表
 const initChart1 = () => {
@@ -341,15 +397,15 @@ const initChart1 = () => {
           },
           data: [
             {
-              value: 1048,
-              name: 'Search Engine',
+              value: data.value.DD,
+              name: 'DD',
               itemStyle: {
                 borderRadius: 200,
               },
             },
             {
-              value: 735,
-              name: 'Direct',
+              value: data.value.SD,
+              name: 'SD',
             },
           ],
         },
@@ -379,15 +435,15 @@ const initChart2 = () => {
           },
           data: [
             {
-              value: 1048,
-              name: 'Search Engine',
+              value: data.value.Lower,
+              name: 'Lower',
               itemStyle: {
                 borderRadius: 200,
               },
             },
             {
-              value: 735,
-              name: 'Direct',
+              value: data.value.Upper,
+              name: 'Upper',
             },
           ],
         },
@@ -418,18 +474,18 @@ const initChart3 = () => {
           },
           data: [
             {
-              value: 35,
+              value: data.value.Small,
               name: 'Small',
             },
             {
-              value: 35,
+              value: data.value.Medium,
               name: 'Medium',
               itemStyle: {
                 borderRadius: [200, 0, 200, 0],
               },
             },
             {
-              value: 30,
+              value: data.value.Large,
               name: 'Large',
               itemStyle: {
                 borderRadius: 200,
@@ -465,11 +521,6 @@ const destroyAllCharts = () => {
     const chart5 = echarts.getInstanceByDom(chartRef5.value)
     if (chart5) chart5.dispose()
   }
-  initChart1()
-  initChart2()
-  initChart3()
-  initChart4()
-  initChart5()
 }
 // 初始化第四个图表 - Stacker Crane Cycle Analysis
 const initChart4 = () => {
@@ -486,7 +537,7 @@ const initChart4 = () => {
       },
       xAxis: {
         type: 'category',
-        data: ['Sep', 'Mar', 'Dec', 'Feb', 'Apr', 'Jun'],
+        data: data.value.StackerCraneCycleAnalysis.map((item) => item.Month),
         axisLine: {
           show: false,
         },
@@ -524,7 +575,7 @@ const initChart4 = () => {
         {
           name: 'Work',
           type: 'bar',
-          data: [80, 37, 65, 65, 85, 50],
+          data: data.value.StackerCraneCycleAnalysis.map((item) => item.Work),
           label: {
             show: true,
             position: 'top', // 方块放在柱头
@@ -559,7 +610,7 @@ const initChart4 = () => {
         {
           name: 'Standby',
           type: 'bar',
-          data: [53, 80, 47, 50, 65, 50],
+          data: data.value.StackerCraneCycleAnalysis.map((item) => item.Standby),
           label: {
             show: true,
             position: 'top', // 方块放在柱头
@@ -612,7 +663,7 @@ const initChart5 = () => {
       },
       xAxis: {
         type: 'category',
-        data: ['Sep', 'Mar', 'Dec', 'Feb', 'Apr', 'Jun'],
+        data: data.value.BCRReadstatistics.map((item) => item.Month),
         axisLine: {
           show: false,
         },
@@ -650,7 +701,7 @@ const initChart5 = () => {
         {
           name: 'ASRS',
           type: 'bar',
-          data: [75, 35, 60, 62, 82, 48],
+          data: data.value.BCRReadstatistics.map((item) => item.ASRS),
           barGap: '30%', // ← 关键：同一刻度内两根柱子间距、
           label: {
             show: true,
@@ -685,7 +736,7 @@ const initChart5 = () => {
         {
           name: '3B',
           type: 'bar',
-          data: [50, 78, 45, 48, 63, 48],
+          data: data.value.BCRReadstatistics.map((item) => item['3B']),
           label: {
             show: true,
             position: 'top', // 方块放在柱头
@@ -727,11 +778,7 @@ const initChart5 = () => {
 onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
-  initChart1()
-  initChart2()
-  initChart3()
-  initChart4()
-  initChart5()
+   ue5('loaded', { msg: '加载完成了' })
 })
 // 组件卸载时移除事件监听器
 onUnmounted(() => {
@@ -753,7 +800,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // background-color: black;
+  background-color: black;
 
   .left {
     width: 960px;
@@ -974,14 +1021,14 @@ onUnmounted(() => {
         height: 100%;
         background: rgba(255, 255, 255, 0.4);
         border-radius: 8px 8px 8px 8px;
-        padding: 28px 20px 27px 20px;
+        padding: 15px 20px 0 20px;
         .chart-wrap {
           width: 100%;
           box-sizing: border-box;
-          padding: 0 105px;
+          padding: 0 65px;
           margin-top: 20px;
           align-items: center;
-          img{
+          img {
             width: 20px;
             margin-right: 4px;
           }

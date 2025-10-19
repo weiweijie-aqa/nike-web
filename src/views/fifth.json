@@ -1,0 +1,33 @@
+{
+  "SKU": "120",
+  "Inventoryutilization": "85",
+  "DD": "35",
+  "SD": "65",
+  "Lower": "35",
+  "Upper": "65",
+  "Small": "35",
+  "Medium": "35",
+  "Large": "30",
+  "StackerCraneCycleAnalysis": [
+    { "Month": "Aug", "Work": "80", "Standby": "50" },
+    { "Month": "Oct", "Work": "40", "Standby": "80" },
+    { "Month": "Dec", "Work": "60", "Standby": "50" },
+    { "Month": "Feb", "Work": "60", "Standby": "60" },
+    { "Month": "Apr", "Work": "90", "Standby": "50" },
+    { "Month": "Jun", "Work": "50", "Standby": "50" }
+  ],
+  "BCRReadstatistics": [
+    { "Month": "Aug", "ASRS": "90", "3B": "50" },
+    { "Month": "Oct", "ASRS": "60", "3B": "50" },
+    { "Month": "Dec", "ASRS": "40", "3B": "80" },
+    { "Month": "Feb", "ASRS": "70", "3B": "50" },
+    { "Month": "Apr", "ASRS": "90", "3B": "50" },
+    { "Month": "Jun", "ASRS": "80", "3B": "30" }
+  ],
+  "IB_Accuracy": "97",
+  "IB_CTN": "20",
+  "IB_Unit": "120",
+  "OB_Accuracy": "97",
+  "OB_CTN": "20",
+  "OB_Unit": "120"
+}

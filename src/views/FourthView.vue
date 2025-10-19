@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <div  v-if="data" class="page-content">
     <div class="left">
       <div class="top"></div>
       <div class="bottom"></div>
@@ -7,12 +7,12 @@
     <div class="right">
       <div class="dashboard-section">
         <div class="section-header">Today’s Repacking Volume</div>
-        <div class="section-content"><span>120</span> <span class="ft-24">ku</span></div>
+        <div class="section-content"><span>{{ data.TodayRepackingVolume }}</span> <span class="ft-24">ku</span></div>
         <img class="box-icon" src="../assets/icon23.svg" alt="" />
       </div>
       <div class="dashboard-section">
-        <div class="section-header">CAPACITY UTILIZATION%</div>
-        <div class="section-content"><span>85</span><span class="ft-36">%</span></div>
+        <div class="section-header">Capacity Utilization%</div>
+        <div class="section-content"><span>{{ data.CapacityUtilization }}</span><span class="ft-36">%</span></div>
         <div class="dashboard">
           <img class="box-icon" src="../assets/icon24.svg" alt="" />
           <img class="pointer" src="../assets/icon25.svg" alt="" />
@@ -21,9 +21,9 @@
       <div class="dashboard-section">
         <div class="section-header">Overall Repacking Status</div>
         <div class="flex mt-31" style="align-items: center">
-          <span class="ft-48 font-bold lh-58 mr-16">25%</span>
+          <span class="ft-48 font-bold lh-58 mr-16">{{ data.OverallRepackingStatus }}%</span>
           <a-progress
-            :percent="25"
+            :percent="data.OverallRepackingStatus"
             :showInfo="false"
             :size="12"
             trailColor="#ADADAD"
@@ -42,10 +42,10 @@
             style="flex-shrink: 0; align-items: center; justify-content: space-between"
           >
             <span class="ft-16 font-normal" style="color: rgba(35, 37, 37, 0.8)">Replenish</span>
-            <span class="ft-24 font-bold">35%</span>
+            <span class="ft-24 font-bold">{{ data.Replenish }}%</span>
           </div>
           <a-progress
-            :percent="35"
+            :percent="data.Replenish"
             :showInfo="false"
             :size="12"
             trailColor="#ADADAD"
@@ -61,10 +61,10 @@
             style="flex-shrink: 0; align-items: center; justify-content: space-between"
           >
             <span class="ft-16 font-normal" style="color: rgba(35, 37, 37, 0.8)">Pick & Pack</span>
-            <span class="ft-24 font-bold">25%</span>
+            <span class="ft-24 font-bold">{{ data.PickPack }}%</span>
           </div>
           <a-progress
-            :percent="25"
+            :percent="data.PickPack"
             :showInfo="false"
             :size="12"
             trailColor="#ADADAD"
@@ -87,10 +87,10 @@
               <div class="ft-16 font-normal nd" style="color: rgba(35, 37, 37, 0.8)">nd</div>
               <div class="ft-16 font-bold ml-8" style="color: rgba(35, 37, 37, 0.8)">Floor</div>
             </div>
-            <span class="ft-24 font-bold">35%</span>
+            <span class="ft-24 font-bold">{{ data.Floor2 }}%</span>
           </div>
           <a-progress
-            :percent="35"
+            :percent="data.Floor2"
             :showInfo="false"
             :size="12"
             trailColor="#ADADAD"
@@ -110,10 +110,10 @@
               <div class="ft-16 font-normal nd" style="color: rgba(35, 37, 37, 0.8)">nd</div>
               <div class="ft-16 font-bold ml-8" style="color: rgba(35, 37, 37, 0.8)">Floor</div>
             </div>
-            <span class="ft-24 font-bold">25%</span>
+            <span class="ft-24 font-bold">{{ data.Floor3 }}%</span>
           </div>
           <a-progress
-            :percent="25"
+            :percent="data.Floor3"
             :showInfo="false"
             :size="12"
             trailColor="#ADADAD"
@@ -128,15 +128,15 @@
         <div class="section-header">Last Month’s Volume Share: 2F vs 3F</div>
         <div class="section-last-month">
           <div class="h-38 mr-32" style="color: #232525">
-            <span class="ft-32 font-bold">3.5</span>
+            <span class="ft-32 font-bold">{{ data.F2VSF3.F2 }}</span>
             <span class="ft-16 font-bold"> Mu</span>
             <span class="ft-20 font-bold"> VS</span>
-            <span class="ft-32 font-bold ml-12">2.8</span>
+            <span class="ft-32 font-bold ml-12">{{ data.F2VSF3.F3 }}</span>
             <span class="ft-16 font-bold"> Mu</span>
           </div>
           <a-progress
             type="circle"
-            :percent="75"
+            :percent="Number(data.F2VSF3.F2)/(Number(data.F2VSF3.F2)+Number(data.F2VSF3.F3))*100"
             trailColor="#99A8BD"
             strokeColor="#FF5A00"
             :size="80"
@@ -154,8 +154,47 @@
   </div>
 </template>
 <script setup lang="ts">
-import {  onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
+import fourthData from './Fourth.json'
+
+// JSON数据对象
+const data = ref()
+const flag = ref(true)
+const hideView = () => {
+  if (flag.value) {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(-100%)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(100%)'
+    }
+  } else {
+    // 控制左侧区域宽度为0，实现隐藏效果
+    const leftElement = document.querySelector('.left') as HTMLElement
+    const rightElement = document.querySelector('.right') as HTMLElement
+    if (leftElement) {
+      leftElement.style.transform = 'translateX(0)'
+    }
+    if (rightElement) {
+      rightElement.style.transform = 'translateX(0)'
+    }
+  }
+  flag.value = !flag.value
+}
+window.ue.interface.handleHide = () => {
+  hideView()
+}
+/* 接收 UE 消息 */
+window.ue.interface.sendData = (jsonStr: string) => {
+  data.value = JSON.parse(jsonStr)
+  setTimeout(() => {
+    handleResize()
+  }, 100)
+}
 
 const chartRef1 = ref<HTMLDivElement>()
 // 窗口尺寸响应式数据
@@ -189,27 +228,30 @@ const initChart1 = () => {
 
     const option = {
       title: {
-        text: '12 month rolling volume',
+        text: '12 Month Repacking Volume',
         left: 'left',
         top: 0,
         textStyle: {
           color: '#110600',
-          fontSize: "24",
+          fontSize: '24',
           fontWeight: 'bold',
           fontFamily: 'Nike Trade Gothic Bold',
         },
       },
       legend: {
-        data: ['Inbound', 'Outbound'],
+        data: ['Repackaged Quantity', 'Zero Picking Rat'],
         right: 'right',
+        icon: 'roundRect',
+        itemWidth: 24,
+        itemHeight: 2,
         top: 0,
         orient: 'horizontal',
         textStyle: {
           color: '#110600',
           fontFamily: 'NikeNormal',
-          fontSize: "16",
+          fontSize: '16',
         },
-        width: "300",
+        width: '800',
       },
       grid: {
         left: '3%',
@@ -219,7 +261,7 @@ const initChart1 = () => {
       },
       xAxis: {
         type: 'category',
-        data: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        data:data.value.MonthPP12.PPData.map((item) => item.Month),
         axisLine: {
           lineStyle: {
             color: 'rgba(0,0,0,0.05)',
@@ -233,36 +275,82 @@ const initChart1 = () => {
         },
         axisLabel: {
           color: '#110600',
-          fontSize: "16",
+          fontSize: '16',
         },
       },
-      yAxis: {
-        type: 'value',
-        axisLine: {
-          lineStyle: {
-            color: '#ccc',
+      yAxis: [
+        {
+          type: 'value',
+          name: '(K units)',
+          nameLocation: 'end',
+          min: 'dataMin', // 取数据最小值
+          nameTextStyle: {
+            color: '#666',
+            fontFamily: 'NikeNormal',
+            fontSize: '16',
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#ccc',
+            },
+          },
+          axisLabel: {
+            color: '#666',
+          },
+          splitLine: {
+            lineStyle: {
+              color: 'rgba(0,0,0,0.05)',
+            },
           },
         },
-        axisLabel: {
-          color: '#666',
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'rgba(0,0,0,0.05)',
+        {
+          type: 'value',
+          position: 'right',
+          nameTextStyle: {
+            color: '#666',
+            fontFamily: 'NikeNormal',
+            fontSize: '16',
           },
-        },
-      },
+          axisLine: {
+            lineStyle: {
+              color: '#ccc',
+            },
+          },
+          axisLabel: {
+            color: '#666',
+            formatter: '{value}%'
+          },
+          splitLine: {
+            show: false, // 隐藏右侧Y轴的分割线，避免重复
+          },
+        }
+      ],
       series: [
         {
-          name: 'GI',
+          name: 'Repackaged Quantity',
           type: 'line',
-          data: [350, 700, 450, 750, 1250, 1450, 1250, 1700, 1200, 750, 850],
+          data: data.value.MonthPP12.PPData.map((item) => item.RepackingVolume),
           lineStyle: {
             color: '#EA5E13',
             width: 3,
           },
           itemStyle: {
             color: '#FF6B35',
+          },
+          symbol: 'none',
+          smooth: true,
+        },
+        {
+          name: 'Zero Picking Rat',
+          type: 'line',
+          yAxisIndex: 1, // 使用右侧Y轴
+          data: data.value.MonthPP12.PPData.map((item) => item.Percentage),
+          lineStyle: {
+            color: '#5291EA',
+            width: 3,
+          },
+          itemStyle: {
+            color: '#4A90E2',
           },
           symbol: 'none',
           smooth: true,
@@ -291,8 +379,7 @@ const initAllCharts = () => {
 onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
-  // 初始化所有图表
-  initAllCharts()
+  ue5('loaded', { msg: '加载完成了' })
 })
 
 // 组件卸载时移除事件监听器
