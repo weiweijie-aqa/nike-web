@@ -20,14 +20,14 @@
           <div class="circle-item">
             <a-progress
               type="circle"
-              :percent="data.AP.Percentage"
+              :percent="Number(data.AP.Percentage)>90?90:data.AP.Percentage"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="90"
               :strokeWidth="12.5"
             >
-              <template #format="percent">
-                <span class="ft-20 font-normal">{{ percent }}%</span>
+              <template #format>
+                <span class="ft-20 font-normal">{{ data.AP.Percentage }}%</span>
               </template>
             </a-progress>
             <div class="circle-info">
@@ -39,14 +39,14 @@
           <div class="circle-item">
             <a-progress
               type="circle"
-              :percent="data.FW.Percentage"
+              :percent="Number(data.FW.Percentage)>90?90:data.FW.Percentage"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="90"
               :strokeWidth="12.5"
             >
-              <template #format="percent">
-                <span class="ft-20 font-normal">{{ percent }}%</span>
+              <template #format>
+                <span class="ft-20 font-normal">{{ data.FW.Percentage }}%</span>
               </template>
             </a-progress>
             <div class="circle-info">
@@ -58,14 +58,14 @@
           <div class="circle-item">
             <a-progress
               type="circle"
-              :percent="data.OMNI.Percentage"
+              :percent="Number(data.OMNI.Percentage)>90?90:data.OMNI.Percentage"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="90"
               :strokeWidth="12.5"
             >
-              <template #format="percent">
-                <span class="ft-20 font-normal">{{ percent }}%</span>
+              <template #format>
+                <span class="ft-20 font-normal">{{ data.OMNI.Percentage }}%</span>
               </template>
             </a-progress>
             <div class="circle-info">
@@ -124,7 +124,7 @@
 
             <div class="ytd-item">
               <div class="icon-wrap">
-                <img src="../assets/icon3.svg" class="icon" />
+                <img src="../assets/icon30.svg" class="icon" />
               </div>
               <div class="ytd-info">
                 <div style="display: flex; align-items: center; justify-content: space-between">
@@ -149,7 +149,7 @@
 
             <div class="ytd-item">
               <div class="icon-wrap">
-                <img src="../assets/icon4.svg" class="icon" />
+                <img src="../assets/icon31.svg" class="icon" />
               </div>
               <div class="ytd-info">
                 <div style="display: flex; align-items: center; justify-content: space-between">
@@ -275,7 +275,8 @@ const initChart = () => {
           },
         },
         axisLabel: {
-          color: '#110600',
+          color: 'rgba(35,37,37,0.8)',
+          fontFamily: 'NikeNormal',
           fontSize: '16',
         },
       },

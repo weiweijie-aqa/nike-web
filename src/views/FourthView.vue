@@ -1,5 +1,5 @@
 <template>
-  <div  v-if="data" class="page-content">
+  <div v-if="data" class="page-content">
     <div class="left">
       <div class="top"></div>
       <div class="bottom"></div>
@@ -7,15 +7,27 @@
     <div class="right">
       <div class="dashboard-section">
         <div class="section-header">Today’s Repacking Volume</div>
-        <div class="section-content"><span>{{ data.TodayRepackingVolume }}</span> <span class="ft-24">ku</span></div>
+        <div class="section-content">
+          <span>{{ data.TodayRepackingVolume }}</span> <span class="ft-24">ku</span>
+        </div>
         <img class="box-icon" src="../assets/icon23.svg" alt="" />
       </div>
       <div class="dashboard-section">
         <div class="section-header">Capacity Utilization%</div>
-        <div class="section-content"><span>{{ data.CapacityUtilization }}</span><span class="ft-36">%</span></div>
+        <div class="section-content">
+          <span>{{ data.CapacityUtilization }}</span
+          ><span class="ft-36">%</span>
+        </div>
         <div class="dashboard">
-          <img class="box-icon" src="../assets/icon24.svg" alt="" />
-          <img class="pointer" src="../assets/icon25.svg" alt="" />
+          <img class="bg" src="../assets/icon24.svg" alt="" />
+          <img
+            class="pointer"
+            src="../assets/icon25.svg"
+            alt=""
+            :style="{
+              transform: `translateX(-6px) rotateZ(${(-180 * (100-Number(data.CapacityUtilization))) / 100}deg)`,
+            }"
+          />
         </div>
       </div>
       <div class="dashboard-section">
@@ -83,9 +95,7 @@
             style="flex-shrink: 0; align-items: center; justify-content: space-between"
           >
             <div class="flex">
-              <div class="ft-16 font-bold count" style="color: rgba(35, 37, 37, 0.8)">2</div>
-              <div class="ft-16 font-normal nd" style="color: rgba(35, 37, 37, 0.8)">nd</div>
-              <div class="ft-16 font-bold ml-8" style="color: rgba(35, 37, 37, 0.8)">Floor</div>
+              <div class="ft-16 font-bold" style="color: rgba(35, 37, 37, 0.8)">2 Floor</div>
             </div>
             <span class="ft-24 font-bold">{{ data.Floor2 }}%</span>
           </div>
@@ -106,9 +116,7 @@
             style="flex-shrink: 0; align-items: center; justify-content: space-between"
           >
             <div class="flex">
-              <div class="ft-16 font-bold count" style="color: rgba(35, 37, 37, 0.8)">3</div>
-              <div class="ft-16 font-normal nd" style="color: rgba(35, 37, 37, 0.8)">nd</div>
-              <div class="ft-16 font-bold ml-8" style="color: rgba(35, 37, 37, 0.8)">Floor</div>
+              <div class="ft-16 font-bold count" style="color: rgba(35, 37, 37, 0.8)">3 Floor</div>
             </div>
             <span class="ft-24 font-bold">{{ data.Floor3 }}%</span>
           </div>
@@ -136,7 +144,9 @@
           </div>
           <a-progress
             type="circle"
-            :percent="Number(data.F2VSF3.F2)/(Number(data.F2VSF3.F2)+Number(data.F2VSF3.F3))*100"
+            :percent="
+              (Number(data.F2VSF3.F2) / (Number(data.F2VSF3.F2) + Number(data.F2VSF3.F3))) * 100>90?90:(Number(data.F2VSF3.F2) / (Number(data.F2VSF3.F2) + Number(data.F2VSF3.F3))) * 100
+            "
             trailColor="#99A8BD"
             strokeColor="#FF5A00"
             :size="80"
@@ -261,7 +271,7 @@ const initChart1 = () => {
       },
       xAxis: {
         type: 'category',
-        data:data.value.MonthPP12.PPData.map((item) => item.Month),
+        data: data.value.MonthPP12.PPData.map((item) => item.Month),
         axisLine: {
           lineStyle: {
             color: 'rgba(0,0,0,0.05)',
@@ -274,7 +284,8 @@ const initChart1 = () => {
           },
         },
         axisLabel: {
-          color: '#110600',
+          color: 'rgba(35,37,37,0.8)',
+          fontFamily: 'NikeNormal',
           fontSize: '16',
         },
       },
@@ -318,12 +329,12 @@ const initChart1 = () => {
           },
           axisLabel: {
             color: '#666',
-            formatter: '{value}%'
+            formatter: '{value}%',
           },
           splitLine: {
             show: false, // 隐藏右侧Y轴的分割线，避免重复
           },
-        }
+        },
       ],
       series: [
         {
@@ -412,7 +423,7 @@ onUnmounted(() => {
     padding: 8px;
     background: rgba(248, 248, 247, 0.5);
     border-radius: 0px 8px 8px 0px;
-
+    transition: all 0.6s ease;
     .top {
       width: 100%;
       height: 432px;
@@ -446,6 +457,7 @@ onUnmounted(() => {
     justify-content: flex-start;
     align-content: flex-start;
     gap: 8px;
+    transition: all 0.6s ease;
     .dashboard-section {
       width: 468px;
       height: 170px;
@@ -479,20 +491,21 @@ onUnmounted(() => {
         position: absolute;
         top: 50px;
         right: 26px;
-        width: 186.55px;
-        height: 145.42px;
-        .box-icon {
-          width: 186.55px;
-          height: 145.42px;
+        width: 185px;
+        height: 90px;
+        //background: #000;
+        .bg {
+          width: 185px;
+          height: 90px;
         }
         .pointer {
-          width: 36.44px;
-          height: 30.06px;
+          width: 38px;
+          height: 20px;
           position: absolute;
-          bottom: 26px;
-          right: 120px;
-          transform: rotateZ(0deg);
-          transform-origin: 0% 50%;
+          bottom: 2px;
+          left: 50%;
+          transform: translateX(-6px) rotateZ(0deg);
+          transform-origin: 20% 50%;
         }
       }
     }
@@ -511,9 +524,6 @@ onUnmounted(() => {
       }
       .nd {
         margin-top: -5px;
-      }
-      .count {
-        transform: translateY(5px);
       }
       .section-last-month {
         width: 100%;

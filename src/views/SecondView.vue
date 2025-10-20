@@ -260,6 +260,9 @@ const initChart1 = () => {
           radius: ['75%', '100%'],
           center: ['50%', '50%'],
           color: ['#FF5A00', '#99A8BD'],
+          emphasis: {
+            disabled: true,
+          },
           label: {
             show: true,
             position: 'outside',
@@ -329,6 +332,9 @@ const initChart2 = () => {
           radius: ['75%', '100%'],
           center: ['50%', '50%'],
           color: ['#FF5A00', '#99A8BD'],
+          emphasis: {
+            disabled: true,
+          },
           label: {
             show: true,
             position: 'outside',
@@ -413,7 +419,8 @@ const initChart3 = () => {
           },
         },
         axisLabel: {
-          color: '#110600',
+          color: 'rgba(35,37,37,0.8)',
+          fontFamily: 'NikeNormal',
           fontSize: '16',
         },
       },
@@ -501,7 +508,7 @@ onUnmounted(() => {
     padding: 8px;
     background: rgba(248, 248, 247, 0.5);
     border-radius: 0px 8px 8px 0px;
-
+    transition: all 0.6s ease;
     .top {
       width: 100%;
       height: 432px;
@@ -552,7 +559,7 @@ onUnmounted(() => {
     justify-content: flex-start;
     align-content: flex-start;
     gap: 8px;
-
+    transition: all 0.6s ease;
     .dashboard-section {
       width: 468px;
       height: 170px;

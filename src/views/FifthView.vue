@@ -124,14 +124,14 @@
           <div class="progress-wrap">
             <a-progress
               type="circle"
-              :percent="data.Inventoryutilization"
+              :percent="Number(data.Inventoryutilization)>90?90:data.Inventoryutilization"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="100"
               :strokeWidth="12.5"
             >
-              <template #format="percent">
-                <span class="ft-16 font-normal" style="color: #232525">{{ percent }}%</span>
+              <template #format>
+                <span class="ft-16 font-normal" style="color: #232525">{{ data.Inventoryutilization }}%</span>
               </template>
             </a-progress>
           </div>
@@ -177,21 +177,23 @@
           <div class="legend">
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #4e4e4e"></div>
-              <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Small <span class="ml-12">{{ data.Small }}%</span>
+              <div class="font-bold ft-20 ml-4 flex" style="color: #110600">
+                <div class="w-63">Small</div>
+                <span class="ml-12">{{ data.Small }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #a9acb2"></div>
-              <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Medium
+              <div class="font-bold ft-20 ml-4 flex" style="color: #110600">
+                <div class="w-63">Medium</div>
                 <span class="ml-12">{{ data.Medium }}%</span>
               </div>
             </div>
             <div class="legend-item">
               <div class="w-16 h-16" style="background: #ff6c0a"></div>
-              <div class="font-bold ft-20 ml-4" style="color: #110600">
-                Large <span class="ml-12">{{ data.Large }}%</span>
+              <div class="font-bold ft-20 ml-4 flex" style="color: #110600">
+                <div class="w-63">Large</div>
+                <span class="ml-12">{{ data.Large }}%</span>
               </div>
             </div>
           </div>
@@ -241,14 +243,14 @@
             <div class="flex" style="flex-direction: column; align-items: center">
               <a-progress
                 type="circle"
-                :percent="data.IB_Accuracy"
+                :percent="Number(data.IB_Accuracy)>90?90:data.IB_Accuracy"
                 trailColor="#99A8BD"
                 strokeColor="#FF5A00"
                 :size="80"
                 :strokeWidth="12.5"
               >
-                <template #format="percent">
-                  <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
+                <template #format>
+                  <div class="ft-16 font-normal" style="color: #232525">{{ data.IB_Accuracy }}%</div>
                   <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
                     Accuracy
                   </div>
@@ -277,14 +279,14 @@
             <div class="flex" style="flex-direction: column; align-items: center">
               <a-progress
                 type="circle"
-                :percent="data.OB_Accuracy"
+                :percent="Number(data.OB_Accuracy)>90?90:data.OB_Accuracy"
                 trailColor="#99A8BD"
                 strokeColor="#FF5A00"
                 :size="80"
                 :strokeWidth="12.5"
               >
-                <template #format="percent">
-                  <div class="ft-16 font-normal" style="color: #232525">{{ percent }}%</div>
+                <template #format>
+                  <div class="ft-16 font-normal" style="color: #232525">{{ data.OB_Accuracy }}%</div>
                   <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
                     Accuracy
                   </div>
@@ -312,8 +314,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-// import fifthData from './fifth.json'
-const data = ref()
+import fifthData from './fifth.json'
+const data = ref(fifthData)
 const flag = ref(true)
 const hideView = () => {
   if (flag.value) {
@@ -778,7 +780,7 @@ const initChart5 = () => {
 onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
-   ue5('loaded', { msg: '加载完成了' })
+  ue5('loaded', { msg: '加载完成了' })
 })
 // 组件卸载时移除事件监听器
 onUnmounted(() => {
@@ -800,7 +802,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: black;
+  //background-color: black;
 
   .left {
     width: 960px;
@@ -810,6 +812,7 @@ onUnmounted(() => {
     padding: 8px;
     background: rgba(248, 248, 247, 0.5);
     border-radius: 0px 8px 8px 0px;
+    transition: all 0.6s ease;
     .equipment-statistics {
       width: 100%;
       height: 153px;
@@ -908,6 +911,7 @@ onUnmounted(() => {
     justify-content: flex-start;
     align-content: flex-start;
     gap: 8px;
+    transition: all 0.6s ease;
     .sku {
       flex: 1;
       height: 184px;

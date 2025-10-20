@@ -1,7 +1,6 @@
 <template>
   <div  v-if="data" class="page-content">
     <div class="left">
-      {{}}
       <div class="top">
         <img src="../assets/map.png" alt="" />
       </div>
@@ -119,7 +118,7 @@
           <img src="../assets/icon11.svg" alt="" />
           <span class="line-height-19">Dock ToStock</span>
           <span class="line-height-19">Time</span>
-          <span class="count">{{ data.DockToStockTime }}min</span>
+          <span class="count">{{ data.DockToStockTime }}h</span>
         </div>
         <div class="info-box">
           <img src="../assets/icon12.svg" alt="" />
@@ -158,14 +157,14 @@
           <div style="display: flex; align-items: center; flex-direction: column">
             <a-progress
               type="circle"
-              :percent="data.RealTimeReceivingProgress"
+              :percent="Number(data.RealTimeReceivingProgress)>90?90:data.RealTimeReceivingProgress"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="120"
               :strokeWidth="12.5"
             >
-              <template #format="percent">
-                <span class="ft-28 font-bold">{{ percent }}%</span>
+              <template #format>
+                <span class="ft-28 font-bold">{{ data.RealTimeReceivingProgress }}%</span>
               </template>
             </a-progress>
             <div class="legend">
@@ -185,16 +184,14 @@
         </div>
         <div class="daily-exceptions">
           <div class="title">Daily Exceptions</div>
-
           <div class="table-header">
             <div class="column">Stage</div>
             <div class="column">Count</div>
           </div>
           <div class="table-body" v-for="item in data.DailyExceptions.Daily" :key="item.Stage">
             <div class="column">{{ item.Stage }}</div>
-            <div class="column">{{ item.Count }}</div>
+            <div class="column" style="text-align: end">{{ item.Count }}</div>
           </div>
-
         </div>
       </div>
     </div>
@@ -206,7 +203,7 @@ import * as echarts from 'echarts'
 // import thirdData from './Third.json'
 
 // JSON数据对象
-const data = ref()
+const data = ref("")
 const flag = ref(true)
 const hideView = () => {
   if (flag.value) {
@@ -419,7 +416,7 @@ onUnmounted(() => {
     padding: 8px;
     background: rgba(248, 248, 247, 0.5);
     border-radius: 0px 8px 8px 0px;
-
+    transition: all 0.6s ease;
     .top {
       width: 100%;
       height: 432px;
@@ -486,7 +483,7 @@ onUnmounted(() => {
     border-radius: 8px 0px 0px 8px;
     padding: 8px;
     box-sizing: border-box;
-
+    transition: all 0.6s ease;
     .info-list {
       width: 100%;
       height: 264px;
@@ -678,6 +675,7 @@ onUnmounted(() => {
         width: 100%;
         display: flex;
         height: 27px;
+        justify-content: space-between;
         align-items: center;
         padding: 0 8px;
         box-sizing: border-box;
