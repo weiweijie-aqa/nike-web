@@ -1,5 +1,5 @@
 <template>
-  <div  v-if="data" class="page-content">
+  <div v-if="data" class="page-content">
     <div class="left">
       <div class="top">
         <img src="../assets/map.png" alt="" />
@@ -15,7 +15,10 @@
     <div class="right">
       <!-- Today's GI Volume Section -->
       <div class="dashboard-section">
-        <div class="section-title">Today's GI Volume</div>
+        <div class="section-title">
+          <div class="w-218 mr-10">Today's GI Volume</div>
+          <div>SKU Count</div>
+        </div>
         <div class="section-content">
           <div class="volume-info">
             <div class="volume-number">
@@ -59,7 +62,10 @@
 
       <!-- MTD GI Volume Section -->
       <div class="dashboard-section">
-        <div class="section-title">MTD GI Volume</div>
+        <div class="section-title">
+          <div class="w-218 mr-10">MTD GI Volume</div>
+          <div>SKU Count</div>
+        </div>
         <div class="section-content">
           <div class="volume-info">
             <div class="volume-number">{{ data.MTDVolume.Total }} <span class="unit">Ku</span></div>
@@ -75,7 +81,7 @@
         <div class="section-title">Monthly Shipment Target Fulfillment</div>
         <div class="ytd-item">
           <div class="icon-wrap">
-            <img src="../assets/iocn29.svg" class="icon" />
+            <img src="../assets/icon32.svg" class="icon" />
           </div>
           <div class="ytd-info">
             <div style="display: flex; align-items: center; justify-content: space-between">
@@ -109,7 +115,7 @@
             </div>
             <div class="info">
               <div class="code">Ship On Time%</div>
-              <div class="value">{{data.ShipOnTime}}%</div>
+              <div class="value">{{ data.ShipOnTime }}%</div>
             </div>
           </div>
           <div class="box">
@@ -118,7 +124,7 @@
             </div>
             <div class="info">
               <div class="code">Order Fill in%</div>
-              <div class="value">{{data.OrderFillin}}%</div>
+              <div class="value">{{ data.OrderFillin }}%</div>
             </div>
           </div>
           <div class="box">
@@ -127,7 +133,7 @@
             </div>
             <div class="info">
               <div class="code">Order Accuracy%</div>
-              <div class="value">{{data.OrderAccuracy}}%</div>
+              <div class="value">{{ data.OrderAccuracy }}%</div>
             </div>
           </div>
         </div>
@@ -229,7 +235,10 @@ const initAllCharts = () => {
 const initChart1 = () => {
   if (chartRef1.value) {
     const chart = echarts.init(chartRef1.value)
-    const percent = (Number(data.value.TodayGlVolume.Repack) / Number(data.value.TodayGlVolume.Total) * 100).toFixed(2)
+    const percent = (
+      (Number(data.value.TodayGlVolume.Repack) / Number(data.value.TodayGlVolume.Total)) *
+      100
+    ).toFixed(2)
 
     const option = {
       title: {
@@ -302,7 +311,10 @@ const initChart1 = () => {
 const initChart2 = () => {
   if (chartRef2.value) {
     const chart2 = echarts.init(chartRef2.value)
-    const percent = (Number(data.value.MTDVolume.Repack) / Number(data.value.MTDVolume.Total) * 100).toFixed(2)
+    const percent = (
+      (Number(data.value.MTDVolume.Repack) / Number(data.value.MTDVolume.Total)) *
+      100
+    ).toFixed(2)
     const option = {
       title: {
         text: `{percent|${percent}%}\n{label|Repack}`,
@@ -476,6 +488,7 @@ onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
   ue5('loaded', { msg: '加载完成了' })
+  // initAllCharts()
 })
 
 // 组件卸载时移除事件监听器
@@ -576,6 +589,8 @@ onUnmounted(() => {
         line-height: 30px;
         color: #110600;
         margin-bottom: 10px;
+        display: flex;
+        align-items: center;
       }
 
       .ytd-item {

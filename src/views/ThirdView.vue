@@ -116,7 +116,7 @@
         </div>
         <div class="info-box">
           <img src="../assets/icon11.svg" alt="" />
-          <span class="line-height-19">Dock ToStock</span>
+          <span class="line-height-19">Dock To Stock</span>
           <span class="line-height-19">Time</span>
           <span class="count">{{ data.DockToStockTime }}h</span>
         </div>

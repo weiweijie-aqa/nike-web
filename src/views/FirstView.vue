@@ -353,6 +353,7 @@ onMounted(() => {
   // 添加窗口大小变化监听事件
   window.addEventListener('resize', handleResize)
   ue5('loaded', { msg: '加载完成了' })
+  // initChart()
 })
 
 // 组件卸载时移除事件监听器并销毁图表

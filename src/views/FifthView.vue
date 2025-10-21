@@ -124,14 +124,16 @@
           <div class="progress-wrap">
             <a-progress
               type="circle"
-              :percent="Number(data.Inventoryutilization)>90?90:data.Inventoryutilization"
+              :percent="Number(data.Inventoryutilization) > 90 ? 90 : data.Inventoryutilization"
               trailColor="#99A8BD"
               strokeColor="#FF5A00"
               :size="100"
               :strokeWidth="12.5"
             >
               <template #format>
-                <span class="ft-16 font-normal" style="color: #232525">{{ data.Inventoryutilization }}%</span>
+                <span class="ft-16 font-normal" style="color: #232525"
+                  >{{ data.Inventoryutilization }}%</span
+                >
               </template>
             </a-progress>
           </div>
@@ -241,21 +243,22 @@
           </div>
           <div class="flex chart-wrap">
             <div class="flex" style="flex-direction: column; align-items: center">
-              <a-progress
-                type="circle"
-                :percent="Number(data.IB_Accuracy)>90?90:data.IB_Accuracy"
-                trailColor="#99A8BD"
-                strokeColor="#FF5A00"
-                :size="80"
-                :strokeWidth="12.5"
-              >
-                <template #format>
-                  <div class="ft-16 font-normal" style="color: #232525">{{ data.IB_Accuracy }}%</div>
-                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
-                    Accuracy
-                  </div>
-                </template>
-              </a-progress>
+              <!--              <a-progress-->
+              <!--                type="circle"-->
+              <!--                :percent="Number(data.IB_Accuracy)>90?90:data.IB_Accuracy"-->
+              <!--                trailColor="#99A8BD"-->
+              <!--                strokeColor="#FF5A00"-->
+              <!--                :size="80"-->
+              <!--                :strokeWidth="12.5"-->
+              <!--              >-->
+              <!--                <template #format>-->
+              <!--                  <div class="ft-16 font-normal" style="color: #232525">{{ data.IB_Accuracy }}%</div>-->
+              <!--                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">-->
+              <!--                    Accuracy-->
+              <!--                  </div>-->
+              <!--                </template>-->
+              <!--              </a-progress>-->
+              <div ref="chartRef6" class="w-80 h-80"></div>
               <div class="font-normal ft-15" style="color: #110600">Last Month Performance</div>
             </div>
 
@@ -277,21 +280,24 @@
           </div>
           <div class="flex chart-wrap">
             <div class="flex" style="flex-direction: column; align-items: center">
-              <a-progress
-                type="circle"
-                :percent="Number(data.OB_Accuracy)>90?90:data.OB_Accuracy"
-                trailColor="#99A8BD"
-                strokeColor="#FF5A00"
-                :size="80"
-                :strokeWidth="12.5"
-              >
-                <template #format>
-                  <div class="ft-16 font-normal" style="color: #232525">{{ data.OB_Accuracy }}%</div>
-                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">
-                    Accuracy
-                  </div>
-                </template>
-              </a-progress>
+<!--              <a-progress-->
+<!--                type="circle"-->
+<!--                :percent="Number(data.OB_Accuracy) > 90 ? 90 : data.OB_Accuracy"-->
+<!--                trailColor="#99A8BD"-->
+<!--                strokeColor="#FF5A00"-->
+<!--                :size="80"-->
+<!--                :strokeWidth="12.5"-->
+<!--              >-->
+<!--                <template #format>-->
+<!--                  <div class="ft-16 font-normal" style="color: #232525">-->
+<!--                    {{ data.OB_Accuracy }}%-->
+<!--                  </div>-->
+<!--                  <div class="ft-10 font-normal mt-4" style="color: rgba(35, 37, 37, 0.8)">-->
+<!--                    Accuracy-->
+<!--                  </div>-->
+<!--                </template>-->
+<!--              </a-progress>-->
+              <div ref="chartRef7" class="w-80 h-80"></div>
               <div class="font-normal ft-15" style="color: #110600">Last Month Performance</div>
             </div>
 
@@ -314,8 +320,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import * as echarts from 'echarts'
-import fifthData from './fifth.json'
-const data = ref(fifthData)
+// import fifthData from './fifth.json'
+const data = ref()
 const flag = ref(true)
 const hideView = () => {
   if (flag.value) {
@@ -356,6 +362,8 @@ const chartRef2 = ref<HTMLDivElement>()
 const chartRef3 = ref<HTMLDivElement>()
 const chartRef4 = ref<HTMLDivElement>()
 const chartRef5 = ref<HTMLDivElement>()
+const chartRef6 = ref<HTMLDivElement>()
+const chartRef7 = ref<HTMLDivElement>()
 
 // 窗口尺寸响应式数据
 const windowSize = ref({
@@ -377,6 +385,8 @@ const handleResize = () => {
   initChart3()
   initChart4()
   initChart5()
+  initChart6()
+  initChart7()
 }
 // 初始化第一个图表
 const initChart1 = () => {
@@ -768,6 +778,136 @@ const initChart5 = () => {
             },
           },
           barWidth: 10,
+        },
+      ],
+    }
+
+    chart.setOption(option)
+  }
+}
+
+const initChart6 = () => {
+  if (chartRef6.value) {
+    const chart = echarts.init(chartRef6.value)
+    const option = {
+      title: {
+        text: `{percent|${data.value.IB_Accuracy}%}\n{label|Accuracy}`,
+        left: 'center',
+        top: 'center',
+        textStyle: {
+          rich: {
+            percent: {
+              fontSize: '16',
+              color: ' #232525',
+              fontFamily: 'NikeNormal',
+              fontWeight: 'normal',
+              lineHeight:"19"
+            },
+            label: {
+              fontSize: '10',
+              color: ' #232525',
+              fontFamily: 'NikeNormal',
+              fontWeight: 'normal',
+              lineHeight:"12"
+            },
+          },
+        },
+      },
+      series: [
+        {
+          name: '进度',
+          type: 'pie',
+          radius: ['75%', '100%'],
+          center: ['50%', '50%'],
+          color: ['#FF5A00', '#99A8BD'],
+          emphasis: {
+            disabled: true,
+          },
+          label: {
+            show: true,
+            position: 'outside',
+            formatter: '{c}',
+            color: '#232525',
+            fontSize: '14',
+            fontFamily: 'NikeNormal',
+          },
+          labelLine: {
+            show: true, // 是否显示引导线
+            length: 10, // 第一段线长（从扇形边缘出发）
+            length2: 20, // 第二段线长（折后横向段）
+            smooth: 0.2, // 折线圆角平滑度
+          },
+          data: [
+            {
+              value: Number(data.value.IB_Accuracy),
+              name: 'Repack',
+              itemStyle: {
+                borderRadius: 200,
+              },
+            },
+            {
+              value: 100-Number(data.value.IB_Accuracy),
+              name: 'Normal',
+            },
+          ],
+        },
+      ],
+    }
+
+    chart.setOption(option)
+  }
+}
+
+const initChart7 = () => {
+  if (chartRef7.value) {
+    const chart = echarts.init(chartRef7.value)
+    const option = {
+      title: {
+        text: `{percent|${data.value.OB_Accuracy}%}\n{label|Accuracy}`,
+        left: 'center',
+        top: 'center',
+        textStyle: {
+          rich: {
+            percent: {
+              fontSize: '16',
+              color: ' #232525',
+              fontFamily: 'NikeNormal',
+              fontWeight: 'normal',
+              lineHeight:"19"
+            },
+            label: {
+              fontSize: '10',
+              color: ' #232525',
+              fontFamily: 'NikeNormal',
+              fontWeight: 'normal',
+              lineHeight:"12"
+            },
+          },
+        },
+      },
+      series: [
+        {
+          name: '进度',
+          type: 'pie',
+          radius: ['75%', '100%'],
+          center: ['50%', '50%'],
+          color: ['#FF5A00', '#99A8BD'],
+          emphasis: {
+            disabled: true,
+          },
+          data: [
+            {
+              value: Number(data.value.OB_Accuracy),
+              name: 'Repack',
+              itemStyle: {
+                borderRadius: 200,
+              },
+            },
+            {
+              value: 100-Number(data.value.OB_Accuracy),
+              name: 'Normal',
+            },
+          ],
         },
       ],
     }
